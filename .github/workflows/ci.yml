@@ -1,0 +1,52 @@
+name: Django CI
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: taskdb
+          POSTGRES_USER: admin
+          POSTGRES_PASSWORD: admin
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U admin"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.12
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install flake8
+
+      - name: Run lint
+        run: flake8 .
+
+      - name: Run migrations
+        run: python manage.py migrate
+        env:
+          DB_NAME: taskdb
+          DB_USER: admin
+          DB_PASSWORD: admin
+          DB_HOST: localhost
+          DB_PORT: 5432
+
+      - name: Run tests
+        run: python manage.py test

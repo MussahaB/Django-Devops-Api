@@ -1,4 +1,3 @@
-# Django-Devops-Api
 # Django DevOps API
 
 A Django REST API Website built with a complete DevOps workflow including containerization, CI/CD automation, and cloud deployment.

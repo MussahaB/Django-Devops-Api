@@ -90,18 +90,26 @@ DATABASES = {
     #     'HOST': 'db',
     #     'PORT': '5432',
     # }
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("DB_NAME", "taskdb"),
-        "USER": os.getenv("DB_USER", "admin"),
-        "PASSWORD": os.getenv("DB_PASSWORD", "admin"),
-        "HOST": os.getenv("DB_HOST", "db"),
-        "PORT": os.getenv("DB_PORT", "5432"),
-    }
+    # "default": {
+    #     "ENGINE": "django.db.backends.postgresql",
+    #     "NAME": os.getenv("DB_NAME", "taskdb"),
+    #     "USER": os.getenv("DB_USER", "admin"),
+    #     "PASSWORD": os.getenv("DB_PASSWORD", "admin"),
+    #     "HOST": os.getenv("DB_HOST", "db"),
+    #     "PORT": os.getenv("DB_PORT", "5432"),
+    # }
     # 'default': {
     #     'ENGINE': 'django.db.backends.sqlite3',
     #     'NAME': BASE_DIR / 'db.sqlite3',
     # }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('POSTGRES_DB'),
+        'USER': os.environ.get('POSTGRES_USER'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+        'HOST': os.environ.get('POSTGRES_HOST'),
+        'PORT': os.environ.get('POSTGRES_PORT'),
+    }
 }
 
 
@@ -139,4 +147,5 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')

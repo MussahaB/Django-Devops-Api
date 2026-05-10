@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,7 +27,8 @@ SECRET_KEY = "django-insecure-s*$@5c#pqpl!ezc4pu-2&q85jy42n7&!(^lz4i1o8&vf9xg@zh
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+# ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+ALLOWED_HOSTS = ['*']
 
 CSRF_TRUSTED_ORIGINS = os.getenv(
     "CSRF_TRUSTED_ORIGINS",
@@ -50,6 +52,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -102,14 +105,23 @@ DATABASES = {
     #     'ENGINE': 'django.db.backends.sqlite3',
     #     'NAME': BASE_DIR / 'db.sqlite3',
     # }
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('POSTGRES_DB'),
-        'USER': os.environ.get('POSTGRES_USER'),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
-        'HOST': os.environ.get('POSTGRES_HOST'),
-        'PORT': os.environ.get('POSTGRES_PORT'),
-    }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': os.environ.get('POSTGRES_DB'),
+    #     'USER': os.environ.get('POSTGRES_USER'),
+    #     'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+    #     'HOST': os.environ.get('POSTGRES_HOST'),
+    #     'PORT': os.environ.get('POSTGRES_PORT'),
+    # }
+    'default': dj_database_url.config(
+        default=(
+            f"postgres://{os.environ.get('POSTGRES_USER')}:"
+            f"{os.environ.get('POSTGRES_PASSWORD')}@"
+            f"{os.environ.get('POSTGRES_HOST')}:"
+            f"{os.environ.get('POSTGRES_PORT')}/"
+            f"{os.environ.get('POSTGRES_DB')}"
+        )
+    )
 }
 
 
@@ -149,3 +161,4 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

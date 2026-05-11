@@ -1,7 +1,10 @@
 from rest_framework.routers import DefaultRouter
-from .views import TaskViewSet
+from .views import TaskViewSet, health_check
 
 router = DefaultRouter()
 router.register(r"tasks", TaskViewSet)
 
-urlpatterns = router.urls
+urlpatterns = [
+    path('', include(router.urls)),
+    path('health/', health_check),
+]

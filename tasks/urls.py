@@ -7,6 +7,6 @@ router = DefaultRouter()
 router.register(r"tasks", TaskViewSet)
 
 urlpatterns = [
-    path('', include(router.urls)),
-    path('health/', health_check),
+    path("", include(router.urls)),
+    path("health/", health_check),
 ]

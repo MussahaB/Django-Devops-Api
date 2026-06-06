@@ -43,8 +43,19 @@ jobs:
       - name: Run migrations
         run: python manage.py migrate
         env:
-          DATABASE_URL: postgresql://admin:admin@localhost:5432/taskdb
+          POSTGRES_DB: taskdb
+          POSTGRES_USER: admin
+          POSTGRES_PASSWORD: admin
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5432
           DJANGO_SETTINGS_MODULE: config.settings.local
 
       - name: Run tests
         run: python manage.py test
+        env:
+          POSTGRES_DB: taskdb
+          POSTGRES_USER: admin
+          POSTGRES_PASSWORD: admin
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5432
+          DJANGO_SETTINGS_MODULE: config.settings.local
